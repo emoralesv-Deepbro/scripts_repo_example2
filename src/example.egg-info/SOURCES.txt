@@ -1,0 +1,12 @@
+README.md
+VERSION
+pyproject.toml
+src/example.egg-info/PKG-INFO
+src/example.egg-info/SOURCES.txt
+src/example.egg-info/dependency_links.txt
+src/example.egg-info/entry_points.txt
+src/example.egg-info/requires.txt
+src/example.egg-info/top_level.txt
+src/sendData/test.py
+src/sendEmail/__init__.py
+src/sendEmail/test.py

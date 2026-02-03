@@ -1,0 +1,310 @@
+Metadata-Version: 2.4
+Name: example
+Version: 0.1.0
+Summary: example
+Author-email: Eduardo Morales <emorales@deepbro.ai>, Hugo Valenzuela <hvalenzuela@deepbro.ai>, Jose Carlos Barreras <jcbarreras@deepbro.ai>
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: pydantic
+Requires-Dist: onnxruntime
+
+# Feature Template
+
+A template for developing, deploying, and managing features and APIs. This template provides a complete development environment and version management for script deployment.
+
+## Overview
+
+The Feature Template is a production-ready template designed for:
+
+- Feature Development: Build and deploy feature APIs as containerized services
+- Device-Local Script Management: Deploy and version scripts on edge devices or Amazon Web Services EC2
+
+
+### Key Capabilities
+
+- Dual Environment Setup: Production (pip + pyproject.toml) and Development (conda + environment.yml)
+- FastAPI Integration: Full REST API with OpenAPI documentation and testing
+- Version Management: Semantic versioning
+
+### Use Cases
+
+- Feature APIs: Deploy feature extraction and processing services
+- Data Processing Pipelines: Containerized ETL and data processing workflows
+- Microservices: Individual features as independently deployable services
+- Edge Computing: Scripts and features for edge device deployment
+
+## Project Structure
+
+- `src/`: Source code
+  - `api/`: FastAPI endpoints (optional - remove if not deploying a service)
+  - `core/`: Core business logic
+  - `utils/`: Utility functions
+- `api/`: API definitions
+- `docs/`: Documentation
+- `scripts/`: Build and deployment scripts
+- `tests/`: Unit tests
+- `data/`: Data used to feed the algorithms, i.e., for testing
+
+## Customization
+
+- For API deployment: Keep `src/api/` and include routers in `src/main.py` (built with FastAPI)
+- For scripts: Remove `src/api/` and modify `src/main.py` to run your custom logic
+- Add your specific code in `src/core/` for business logic
+- Use `src/utils/` for shared utilities
+
+## Setup
+
+### Production Deployment (using pyproject.toml)
+
+For production environments, use pip with the pyproject.toml configuration:
+
+```bash
+pip install .
+```
+
+Or for editable installation:
+```bash
+pip install -e .
+```
+
+### Development Environment (using conda - recommended)
+
+For development, we recommend using conda for better dependency management, especially for PyTorch and CUDA:
+
+#### Quick Setup (Recommended)
+
+Use the automated setup script:
+
+```bash
+# Run the setup script (downloads ~2GB, may take several minutes)
+bash scripts/setup_conda.sh
+```
+
+The script will:
+- ✅ Check if conda is installed
+- ✅ Create the `feature-template` conda environment
+- ✅ Install all dependencies including PyTorch
+- ✅ Verify the installation
+- ✅ Activate the environment
+
+After setup, activate the environment for future sessions:
+
+```bash
+conda activate feature-template
+```
+
+#### Manual Setup (Alternative)
+
+If you prefer to set up manually:
+
+1. Create conda environment:
+   ```bash
+   conda env create -f environment.yml
+   conda activate feature-template
+   ```
+
+2. Install PyTorch (choose based on your CUDA version):
+   ```bash
+   # For CPU-only
+   conda install pytorch torchvision torchaudio cpuonly -c pytorch
+
+   # For CUDA 11.8
+   conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+
+   # For CUDA 12.1
+   conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+   ```
+
+3. Install additional development dependencies:
+   ```bash
+   pip install -e ".[dev,ml]"
+   ```
+
+#### Verify Installation
+
+After setup, verify everything works:
+
+```bash
+# Check PyTorch
+python -c "import torch; print(f'PyTorch: {torch.__version__}')"
+python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}')"
+
+# Check FastAPI
+python -c "import fastapi; print(f'FastAPI: {fastapi.__version__}')"
+
+# Run tests
+pytest tests/ -v
+```
+
+### Alternative: pip for Development
+
+If you prefer pip for development:
+
+1. Install dependencies:
+   ```bash
+   pip install -e ".[dev,ml]"
+   ```
+
+2. Install PyTorch separately (may require different commands based on your system)
+
+## Usage
+
+### Running the API
+
+```bash
+uvicorn src.main:app --reload
+```
+
+Access the API documentation at:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+### Running Custom Scripts
+
+For scripts or other custom logic, modify `src/main.py` and run:
+
+```bash
+python -m src.main
+```
+
+### Testing
+
+```bash
+pytest tests/
+```
+
+## Environment Management
+
+- Production: Use `pyproject.toml` with pip for clean, minimal production deployments
+- Development: Use `environment.yml` with conda for full development environment including PyTorch, CUDA, and all dev tools
+
+## Development Workflow
+
+### Branching Strategy
+
+When developing or updating features, follow this branching strategy:
+
+#### Feature Branches
+```bash
+# Create a feature branch
+git checkout -b feature/name-of-feature
+
+# Example branches:
+git checkout -b feature/user-authentication
+git checkout -b feature/data-export
+git checkout -b feature/analytics-dashboard
+
+# Work on your feature
+# Make commits...
+
+# Push the branch
+git push origin feature/name-of-feature
+```
+
+#### Pull Request Process
+1. Create: Branch from `main` with `feature/` prefix
+2. Develop: Implement your feature with tests
+3. Test: Ensure all tests pass locally
+4. Push: Push your branch to the repository
+5. PR: Create a pull request to merge into `main`
+6. Review: Address review feedback
+7. Merge: Squash merge when approved
+
+#### Branch Naming Convention
+- `feature/feature-name` - New features
+- `fix/bug-description` - Bug fixes
+- `docs/documentation-update` - Documentation changes
+- `refactor/code-improvement` - Code refactoring
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd feature-template
+
+# Set up development environment
+conda env create -f environment.yml
+conda activate feature-template
+
+# Install development dependencies
+pip install -e ".[dev,ml]"
+
+# Run tests
+pytest tests/
+
+# Start development server
+uvicorn src.main:app --reload
+```
+
+### Code Quality
+
+- Run tests before committing: `pytest tests/`
+- Format code: `black src/ tests/`
+- Lint code: `flake8 src/ tests/`
+- Type check: `mypy src/`
+
+## Version Management
+
+See [runbook.md](docs/runbook.md#version-management) for the strategy on implementing version management for device local scripts.
+
+Key points:
+- Semantic versioning for releases
+- Git tagging for version control
+- Version reporting in scripts and API endpoints
+- Rollback mechanisms for deployments
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:
+
+- Development workflow and branching strategy
+- Code quality standards
+- Testing requirements
+- Pull request process
+
+### Quick Development Start
+
+```bash
+# Create feature branch
+git checkout -b feature/your-feature-name
+
+# Setup environment
+conda env create -f environment.yml
+conda activate feature-template
+
+# Develop and test
+pytest tests/
+uvicorn src.main:app --reload
+```
+
+## Docker & CI/CD
+
+### Local Docker Build
+
+```bash
+docker build -t feature-template .
+docker run -p 8000:8000 feature-template
+```
+
+### CI/CD Pipeline
+
+The template includes GitHub Actions workflows for automated container deployment:
+
+- Automatic: Builds and pushes on push to main, version tags, and pull requests
+- Registry: Uses GitHub Container Registry (ghcr.io)
+- Testing: Runs container tests before publishing
+- Security: Includes build provenance attestation
+
+See [runbook.md](docs/runbook.md#ci-cd-pipeline) for detailed CI/CD instructions.
+
+### Included Files
+
+- `.github/workflows/docker.yml` - GitHub Actions workflow
+- `scripts/container.sh` - Local container management script
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

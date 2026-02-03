@@ -1,0 +1,3 @@
+[console_scripts]
+data = sendEmail.test:main
+mail = sendData.test:main

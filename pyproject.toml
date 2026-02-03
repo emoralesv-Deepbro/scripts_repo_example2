@@ -3,9 +3,9 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "feature-template"
-version = "0.1.0"
-description = "A comprehensive template for developing, deploying, and managing features and APIs with FastAPI",
+name = "example"
+dynamic = ["version"]
+description = "example"
 authors = [
     {name = "Eduardo Morales", email = "emorales@deepbro.ai"},
     {name = "Hugo Valenzuela", email = "hvalenzuela@deepbro.ai"},
@@ -15,21 +15,21 @@ dependencies = [
     "fastapi",
     "uvicorn",
     "pydantic",
+    "onnxruntime",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 readme = "README.md"
 
-[project.optional-dependencies]
-dev = [
-]
-ml = [
-]
+[tool.setuptools.dynamic]
+version = {file = ["VERSION"]}
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["*"]
 
-[tool.setuptools.package-dir]
-"" = "src"
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
+[project.scripts]
+mail = "sendData.test:main"
+data = "sendEmail.test:main"
