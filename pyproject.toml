@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "feature-template"
+version = "0.1.0"
+description = "A comprehensive template for developing, deploying, and managing features and APIs with FastAPI",
+authors = [
+    {name = "Eduardo Morales", email = "emorales@deepbro.ai"},
+    {name = "Hugo Valenzuela", email = "hvalenzuela@deepbro.ai"},
+    {name = "Jose Carlos Barreras", email = "jcbarreras@deepbro.ai"},
+]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+
+[project.optional-dependencies]
+dev = [
+]
+ml = [
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
